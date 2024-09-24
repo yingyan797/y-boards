@@ -1,0 +1,21 @@
+<head>
+    <title>Card games</title>
+</head>
+
+<body>
+    <h2 style="background-color: skyblue;">Card games and AI solutions | <a href="/home">reset</a> </h2>
+    <form action="/" method="post">
+    <img src="static/psyh.jpg"> Select game to play:
+        <select name="gname"> {% for g in games %} <option value="{{g}}">{{g}}</option> {% endfor %} </select>; 
+    Number of players: <input type="number" name="n_players" min="1" max="255" value="2">
+    <input type="submit" name="load_game" value="confirm"> <br>
+    {% if n_players %}
+    Register names of players: {% for i in range(n_players) %} Player {{i}}: <input type="text" name="pname{{i}}">; {% endfor %} <br><br>
+    <b style="background-color: violet;">-- Game entrance fee: ${{9.99*n_players}} --</b> ($9.99 per player, {{n_players}} players); Enter payment detail: <br><br>
+    Credit/Debit card number: <input type="text" name="cardnum">; Cardholder name: <input type="text" name="cardholder"> <br>
+    Expiry date: mm-yy<input type="number" name="mo" min="1" max="12">-<input type="number" name="yr" min="0" max="99">; 
+    CVV code (3 digits): <input type="number" name="cvv" min="0" max="999">; <br><br>
+    <input type="submit" name="register" value="Make payment and continue >>">
+    {% endif %}
+    </form>
+</body>

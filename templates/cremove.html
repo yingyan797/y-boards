@@ -1,0 +1,22 @@
+<head>
+    <title>Card remove</title>
+</head>
+
+<body>
+    <h2 style="background-color: lightgray;">General board game: {{game.name}} | <a href="/home">Home</a> | <a href="/restart">Restart</a></h2>
+    Welcome to the game{% for p in game.player_names %}, {{p}}{% endfor %}! 
+    --Round {{game.round}}; --Turn: <b>{{game.cur_player()}}</b> <br>
+    {% if end %}
+    <h2>Game finished. Winner: {{game.cur_player()}}</h2>
+    {% endif %}{% if not game.ready %} <form action="/board" method="post">
+    set game board dimensions -- width: <input type="number" name="w" min="2" max="255" value="15">; 
+    height: <input type="number" name="h" min="2" max="255" value="10"> 
+    <input type="submit" name="setting" value="start game >>"></form>
+    {% else %}    
+    <table><form action="/board" method="post">
+        {% for r in range(game.board.shape[0]) %}
+        <tr> {% for c in range(game.board.shape[1]) %} <td> {% if game.board[r][c] %} 
+            <input type="submit" name="put{{r}}_{{c}}" value="O" style="background-color: skyblue;"> {% else %} 
+            <input type="submit" name="X" value="X" disabled>{% endif %} </td> {% endfor %} </tr> {% endfor %}
+    </form></table>{% endif %}
+</body>

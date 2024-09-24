@@ -1,0 +1,25 @@
+<head>
+    <title>Board game</title>
+</head>
+
+<body>
+    <h2 style="background-color: aqua;">Black & white board game: {{game.name}}  | <a href="/home">Home</a> | <a href="/restart">Restart</a></h2>
+    Welcome to the game{% for p in game.player_names %}, {{p}}{% endfor %}! 
+    --Round {{game.round}}; --Turn: <b>{{game.cur_player()}}</b> <br>
+    {% if end %}
+    <h2>Game finished. Winner: {{game.cur_player()}}</h2>
+    {% endif %} <form action="/board" method="post">{% if not game.ready %}
+    Set board dimensions - width: <input type="number" name="w" min="15" max="255" value="25">
+    height: <input type="number" name="h" min="10" max="255" value="25">; or upload board: <input type="file" name="lbf">
+    <input type="submit" name="setting" value="start game >>">
+    {% else %} 
+    Save game to file: {{storage}}<input type="text" name="sbf">.csv <input type="submit" name="save" value="save"> <br>
+    <table style="background-color: skyblue;">
+        {% for r in range(game.board.shape[0]) %}
+        <tr> {% for c in range(game.board.shape[1]) %} <td> {% if game.board[r][c]==2 %} 
+            <input type="submit" name="put{{r}}_{{c}}" value="O" style="background-color: skyblue;"> {% elif game.board[r][c]==0 %} 
+            <input type="submit" name="B" value="O" disabled style="background-color: black;"> {% else %}
+            <input type="submit" name="W" value="O" disabled style="background-color: white;">
+            {% endif %} </td> {% endfor %} </tr> {% endfor %}
+    </table>{% endif %}</form>
+</body>

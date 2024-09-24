@@ -1,0 +1,23 @@
+<head>
+    <title>Chess game</title>
+</head>
+
+<body>
+    <h2 style="background-color: lightsalmon;">Chess related games: {{game.name}}  | <a href="/home">Home</a> </h2>
+    Welcome to the game{% for p in game.player_names %}, {{p}}{% endfor %}! 
+    --Round {{game.round}}; --Turn: <b>{{game.cur_player()}}</b> <br>
+    {% if winner %}
+    <h2>Game finished. Winner: {{winner}}</h2>
+    {% endif %}<form action="/chess" method="post">
+    <input type="submit" name="start" value="Start game/Restart">{% if game.ready %}
+    <table style="background-color: skyblue; width: 50%; height: 75%;"><form action="/chess" method="post">
+        {% for r in range(game.shape[0]) %}
+        <tr> {% for c in range(game.shape[1]) %} <td> {% if locf==[r,c] %} 
+            <input type="submit" name="put{{r}}_{{c}}" value="{{game.board[r][c].name}}"
+            style="background-color: {{game.board[r][c].color(game,2)}}; width: 90%; height: 90%;">{% elif game.board[r][c] %} 
+            <input type="submit" name="put{{r}}_{{c}}" value="{{game.board[r][c].name}}" 
+            style="background-color: {{game.board[r][c].color(game)}}; width: 90%; height: 90%;">
+            {% else %} <input type="submit" name="put{{r}}_{{c}}" value="---" style="width: 90%; height: 90%;">
+        {% endif %} </td> {% endfor %} </tr> {% endfor %}
+    </table>{% endif %}</form>
+</body>

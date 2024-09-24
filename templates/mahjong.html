@@ -1,0 +1,44 @@
+<head>
+    <title>Mahjong categories</title>
+    <style>
+    /* Create two equal columns that floats next to each other */
+    .column {
+        float: left;
+        width: 49%;
+        padding: 5px;
+    }
+    
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    </style>
+</head>
+<body>
+    <h2 style="background-color: lightgreen;">Worldwide Mahjong games: {{game.name}} | <a href="/home">Home</a> | <a href="/restart">Restart</a></h2>
+    Welcome to the game{% for p in game.player_names %}, {{p}}{% endfor %}! --Turn: <b>{{game.cur_player()}}</b> <br>
+    {% if end %}
+    <h2>Game finished. Winner: {{game.cur_player()}}</h2>
+    {% endif %}{% if not game.ready %} <form action="/mahjong" method="post">
+    Set number of tiles -- <select name="mahjong_num"><option value="13">13 tiles (General)</option><option value="16">16 tiles (Taiwan)</option></select>
+    <input type="submit" name="setting" value="start game >>"></form>
+    {% else %}
+    {% for segs in [[("西", 2),("北", 1)],[("南", 3),("東", 0)]] %}<div class="row">
+        {% for seg in segs %}<div class="column">
+            <h3>{{seg[0]}}: {{game.player_names[seg[1]]}} {% if game.turn == seg[1] %} (#) {% endif %}</h3>
+            <table><tr>{% for act in acts_avail[seg[1]] %}<th> {% if act[2] %}<input type="submit" name="{{act[1]}}{{seg[1]}}" value="{{act[0]}}">{% else %} 
+                <input type="submit" name="{{act[1]}}{{seg[1]}}" value="{{act[0]}}" disabled>{% endif %}</th>{% endfor %}<th></th>
+                {% for t in hands[seg[1]][2] %} <td> {{t}} </td> {% endfor %}
+            </tr></table>
+            <table style="background-color: skyblue; width: 40%; height: 15%;"><tr>
+                {% for t in hands[seg[1]][0] %} <td> <input type="submit" value="{{t}} disabled" style="width: 90%; height: 90%;"> </td> {% endfor %}
+                {% for t in hands[seg[1]][1] %} <td><input type="submit" name="eject{{t[0]}}_{{seg[1]}}" value="{{t[1]}}" style="width: 90%; height: 90%;"></td> {% endfor %}
+            </tr></table>
+        </div>{% endfor %}</div> {% if segs[0][1] == 2 %}<div class="row"> --- <br><br>
+        {% for t in history %} <button>{{t}}</button> {% endfor %} <br> --- <br> {% for t in wall %} <button>{{t.name}}</button> {% endfor %} --- <br><br>
+    </div> {% endif %} {% endfor %}
+    {% endif %}
+    
+</body>
